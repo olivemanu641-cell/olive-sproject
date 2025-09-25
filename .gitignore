@@ -26,8 +26,5 @@ assets/uploads/**
 # Local config (if any)
 .env
 
-# Install script (optional to ignore in prod)
-public/install.php
-
 # Misc
 olive-sproject/
