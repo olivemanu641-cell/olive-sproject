@@ -8,13 +8,6 @@ Thumbs.db
 vendor/
 composer.lock
 
-# Node
-node_modules/
-
-# Logs / cache
-*.log
-/tmp/
-/cache/
 
 # Uploads (keep .gitkeep only)
 assets/uploads/**

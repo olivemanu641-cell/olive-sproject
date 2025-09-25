@@ -29,6 +29,16 @@ body{
   background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary)) !important;
 }
 
+/* Brand navbar helper when we need a sure orange bar */
+.bg-brand{
+  background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary)) !important;
+}
+
+/* Improve contrast for dark navbars */
+.navbar.navbar-dark .nav-link{ color: rgba(255,255,255,.9); }
+.navbar.navbar-dark .nav-link:hover{ color:#fff; }
+.navbar.navbar-dark .navbar-text{ color:#fff; }
+
 .btn-brand{
   background: var(--brand-primary);
   color:#fff;
