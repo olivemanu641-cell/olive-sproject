@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard - ElevatePro Internships{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="d-flex justify-content-between align-items-center mb-4 animate-slide-up">
+    <div>
+        <h1 class="section-title mb-1">Admin Dashboard</h1>
+        <p class="text-muted mb-0">System overview and management</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="/admin/" class="btn btn-outline-primary">
+            <i class="bi bi-gear me-1"></i>Django Admin
+        </a>
+        <a href="{% url 'internships:create' %}" class="btn btn-brand">
+            <i class="bi bi-plus-circle me-1"></i>New Internship
+        </a>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row g-4 mb-5 animate-stagger">
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card card-elevated modern-stat-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="stat-icon-container">
+                        <i class="bi bi-file-earmark-person stat-icon"></i>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="bi bi-arrow-up-right text-success"></i>
+                        <span class="small text-success">+{{ application_stats.pending }}</span>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number mb-1">{{ application_stats.total }}</h3>
+                    <h6 class="stat-title mb-2">Total Applications</h6>
+                    <p class="stat-description small muted mb-0">{{ application_stats.pending }} pending review</p>
+                </div>
+                <div class="stat-progress mt-3">
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar bg-brand" role="progressbar" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card card-elevated modern-stat-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="stat-icon-container">
+                        <i class="bi bi-people stat-icon"></i>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="bi bi-arrow-up-right text-success"></i>
+                        <span class="small text-success">+{{ user_stats.interns }}</span>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number mb-1">{{ user_stats.total }}</h3>
+                    <h6 class="stat-title mb-2">Total Users</h6>
+                    <p class="stat-description small muted mb-0">{{ user_stats.interns }} interns active</p>
+                </div>
+                <div class="stat-progress mt-3">
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar bg-brand" role="progressbar" style="width: 72%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card card-elevated modern-stat-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="stat-icon-container">
+                        <i class="bi bi-briefcase stat-icon"></i>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="bi bi-arrow-up-right text-success"></i>
+                        <span class="small text-success">+{{ internship_stats.active }}</span>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number mb-1">{{ internship_stats.total }}</h3>
+                    <h6 class="stat-title mb-2">Internships</h6>
+                    <p class="stat-description small muted mb-0">{{ internship_stats.active }} currently active</p>
+                </div>
+                <div class="stat-progress mt-3">
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar bg-brand" role="progressbar" style="width: 90%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-md-6 col-xl-3">
+        <div class="card card-elevated modern-stat-card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="stat-icon-container">
+                        <i class="bi bi-file-earmark-text stat-icon"></i>
+                    </div>
+                    <div class="stat-trend">
+                        <i class="bi bi-arrow-up-right text-success"></i>
+                        <span class="small text-success">+{{ report_stats.submitted }}</span>
+                    </div>
+                </div>
+                <div class="stat-content">
+                    <h3 class="stat-number mb-1">{{ report_stats.total }}</h3>
+                    <h6 class="stat-title mb-2">Reports</h6>
+                    <p class="stat-description small muted mb-0">{{ report_stats.submitted }} awaiting review</p>
+                </div>
+                <div class="stat-progress mt-3">
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar bg-brand" role="progressbar" style="width: 65%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="row g-4">
+    <!-- Recent Applications -->
+    <div class="col-12 col-lg-8">
+        <div class="card card-elevated h-100">
+            <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-file-earmark-person me-2"></i>Recent Applications
+                </h5>
+                <a href="{% url 'applications:manage' %}" class="btn btn-sm btn-outline-primary">
+                    View All
+                </a>
+            </div>
+            <div class="card-body">
+                {% if recent_applications %}
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Applicant</th>
+                                    <th>Internship</th>
+                                    <th>Status</th>
+                                    <th>Submitted</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for application in recent_applications %}
+                                <tr>
+                                    <td>
+                                        <div>
+                                            <div class="fw-semibold">{{ application.get_full_name }}</div>
+                                            <small class="text-muted">{{ application.email }}</small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-soft">{{ application.internship.title }}</span>
+                                    </td>
+                                    <td>
+                                        {% if application.status == 'pending' %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% elif application.status == 'approved' %}
+                                            <span class="badge bg-success">Approved</span>
+                                        {% elif application.status == 'rejected' %}
+                                            <span class="badge bg-danger">Rejected</span>
+                                        {% elif application.status == 'intern_created' %}
+                                            <span class="badge bg-info">Account Created</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">{{ application.submitted_at|date:"M d, Y" }}</small>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'applications:detail' application.pk %}" class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="bi bi-inbox display-4 text-muted mb-3"></i>
+                        <p class="text-muted">No recent applications</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="col-12 col-lg-4">
+        <div class="card card-elevated h-100">
+            <div class="card-header bg-transparent border-0">
+                <h5 class="mb-0">
+                    <i class="bi bi-lightning-charge me-2"></i>Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-3">
+                    <a href="{% url 'applications:manage' %}" class="quick-action-btn">
+                        <div class="quick-action-icon">
+                            <i class="bi bi-file-earmark-check"></i>
+                        </div>
+                        <div class="quick-action-content">
+                            <h6>Review Applications</h6>
+                            <small>{{ application_stats.pending }} pending review</small>
+                        </div>
+                    </a>
+                    
+                    <a href="{% url 'internships:create' %}" class="quick-action-btn">
+                        <div class="quick-action-icon">
+                            <i class="bi bi-plus-circle"></i>
+                        </div>
+                        <div class="quick-action-content">
+                            <h6>Create Internship</h6>
+                            <small>Add new opportunity</small>
+                        </div>
+                    </a>
+                    
+                    <a href="/admin/accounts/user/" class="quick-action-btn">
+                        <div class="quick-action-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="quick-action-content">
+                            <h6>Manage Users</h6>
+                            <small>{{ user_stats.pending_approval }} need approval</small>
+                        </div>
+                    </a>
+                    
+                    <a href="{% url 'internships:manage' %}" class="quick-action-btn">
+                        <div class="quick-action-icon">
+                            <i class="bi bi-briefcase"></i>
+                        </div>
+                        <div class="quick-action-content">
+                            <h6>Manage Internships</h6>
+                            <small>{{ internship_stats.total }} total opportunities</small>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Reports -->
+{% if recent_reports %}
+<div class="row g-4 mt-1">
+    <div class="col-12">
+        <div class="card card-elevated">
+            <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-file-earmark-text me-2"></i>Recent Reports
+                </h5>
+                <a href="/admin/reports/internreport/" class="btn btn-sm btn-outline-primary">
+                    View All
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Report</th>
+                                <th>Intern</th>
+                                <th>Internship</th>
+                                <th>Status</th>
+                                <th>Submitted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for report in recent_reports %}
+                            <tr>
+                                <td>
+                                    <div>
+                                        <div class="fw-semibold">{{ report.title }}</div>
+                                        <small class="text-muted">{{ report.period_label }}</small>
+                                    </div>
+                                </td>
+                                <td>{{ report.intern.get_full_name }}</td>
+                                <td>
+                                    <span class="badge badge-soft">{{ report.internship.title }}</span>
+                                </td>
+                                <td>
+                                    {% if report.status == 'submitted' %}
+                                        <span class="badge bg-warning">Submitted</span>
+                                    {% elif report.status == 'reviewed' %}
+                                        <span class="badge bg-success">Reviewed</span>
+                                    {% elif report.status == 'under_review' %}
+                                        <span class="badge bg-info">Under Review</span>
+                                    {% elif report.status == 'needs_revision' %}
+                                        <span class="badge bg-danger">Needs Revision</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <small class="text-muted">{{ report.created_at|date:"M d, Y" }}</small>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

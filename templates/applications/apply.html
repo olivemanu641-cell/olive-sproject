@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Apply for Internship - ElevatePro Internships{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="text-center mb-5 animate-slide-up">
+    <h1 class="section-title mb-3">Apply for Internship</h1>
+    <p class="lead text-muted">Start your professional journey with us. Fill out the application form below.</p>
+</div>
+
+<!-- Application Form -->
+<div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+        <div class="card card-elevated animate-slide-up">
+            <div class="card-header bg-transparent border-0 pb-0">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="form-icon-container">
+                        <i class="bi bi-file-earmark-person"></i>
+                    </div>
+                    <div>
+                        <h5 class="card-title mb-1">Internship Application Form</h5>
+                        <p class="card-subtitle text-muted mb-0">Please provide accurate information</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body pt-4">
+                <form method="post" enctype="multipart/form-data" class="modern-form needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Personal Information Section -->
+                    <div class="form-section mb-5">
+                        <h6 class="form-section-title">
+                            <i class="bi bi-person me-2"></i>Personal Information
+                        </h6>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label required">First Name</label>
+                                {% render_field form.first_name class="form-control" placeholder="Enter your first name" %}
+                                <div class="invalid-feedback">Please enter your first name.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required">Last Name</label>
+                                {% render_field form.last_name class="form-control" placeholder="Enter your last name" %}
+                                <div class="invalid-feedback">Please enter your last name.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required">Email Address</label>
+                                {% render_field form.email class="form-control" placeholder="your.email@example.com" %}
+                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required">Phone Number</label>
+                                {% render_field form.phone class="form-control" placeholder="+1234567890" %}
+                                <div class="invalid-feedback">Please enter your phone number.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Address Information Section -->
+                    <div class="form-section mb-5">
+                        <h6 class="form-section-title">
+                            <i class="bi bi-geo-alt me-2"></i>Address Information
+                        </h6>
+                        
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label required">Address</label>
+                                {% render_field form.address class="form-control" rows="3" placeholder="Your full address" %}
+                                <div class="invalid-feedback">Please enter your address.</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label required">City</label>
+                                {% render_field form.city class="form-control" placeholder="City" %}
+                                <div class="invalid-feedback">Please enter your city.</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label required">Country</label>
+                                {% render_field form.country class="form-control" placeholder="Country" %}
+                                <div class="invalid-feedback">Please enter your country.</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Postal Code</label>
+                                {% render_field form.postal_code class="form-control" placeholder="Postal Code" %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Educational Information Section -->
+                    <div class="form-section mb-5">
+                        <h6 class="form-section-title">
+                            <i class="bi bi-mortarboard me-2"></i>Educational Background
+                        </h6>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label required">Institution</label>
+                                {% render_field form.institution class="form-control" placeholder="University/School name" %}
+                                <div class="invalid-feedback">Please enter your institution name.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required">Field of Study</label>
+                                {% render_field form.field_of_study class="form-control" placeholder="Computer Science, Engineering, etc." %}
+                                <div class="invalid-feedback">Please enter your field of study.</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label required">Academic Level</label>
+                                {% render_field form.academic_level class="form-control" placeholder="Bachelor, Master, PhD" %}
+                                <div class="invalid-feedback">Please enter your academic level.</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label required">Graduation Year</label>
+                                {% render_field form.graduation_year class="form-control" %}
+                                <div class="invalid-feedback">Please enter your expected graduation year.</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">GPA/Grade</label>
+                                {% render_field form.gpa class="form-control" placeholder="3.50" %}
+                                <small class="form-text text-muted">Optional: Your current GPA or grade average</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Internship Selection Section -->
+                    <div class="form-section mb-5">
+                        <h6 class="form-section-title">
+                            <i class="bi bi-briefcase me-2"></i>Internship Preference
+                        </h6>
+                        
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label required">Desired Internship</label>
+                                {% render_field form.internship class="form-select" %}
+                                <div class="invalid-feedback">Please select an internship.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required">Available Start Date</label>
+                                {% render_field form.available_start_date class="form-control" %}
+                                <div class="invalid-feedback">Please select your available start date.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label required">Preferred Duration (months)</label>
+                                {% render_field form.duration_months class="form-control" %}
+                                <div class="invalid-feedback">Please specify your preferred duration.</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Documents Section -->
+                    <div class="form-section mb-5">
+                        <h6 class="form-section-title">
+                            <i class="bi bi-file-earmark-arrow-up me-2"></i>Required Documents
+                        </h6>
+                        
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label required">CV/Resume</label>
+                                <div class="file-upload-container">
+                                    {% render_field form.cv_resume class="form-control modern-file-input" %}
+                                    <div class="file-upload-overlay">
+                                        <div class="file-upload-content">
+                                            <i class="bi bi-cloud-upload file-upload-icon"></i>
+                                            <p class="file-upload-text">Click to select CV/Resume</p>
+                                            <small class="file-upload-hint">PDF, DOC, DOCX - Max 5MB</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="invalid-feedback">Please upload your CV/Resume.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Cover Letter</label>
+                                <div class="file-upload-container">
+                                    {% render_field form.cover_letter class="form-control modern-file-input" %}
+                                    <div class="file-upload-overlay">
+                                        <div class="file-upload-content">
+                                            <i class="bi bi-cloud-upload file-upload-icon"></i>
+                                            <p class="file-upload-text">Click to select Cover Letter</p>
+                                            <small class="file-upload-hint">Optional - PDF, DOC, DOCX</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Academic Transcript</label>
+                                <div class="file-upload-container">
+                                    {% render_field form.transcript class="form-control modern-file-input" %}
+                                    <div class="file-upload-overlay">
+                                        <div class="file-upload-content">
+                                            <i class="bi bi-cloud-upload file-upload-icon"></i>
+                                            <p class="file-upload-text">Click to select Academic Transcript</p>
+                                            <small class="file-upload-hint">Optional - PDF only</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Motivation and Experience Section -->
+                    <div class="form-section mb-5">
+                        <h6 class="form-section-title">
+                            <i class="bi bi-chat-text me-2"></i>Tell Us About Yourself
+                        </h6>
+                        
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label required">Motivation Letter</label>
+                                {% render_field form.motivation_letter class="form-control" rows="5" placeholder="Tell us why you want this internship and what you hope to achieve..." %}
+                                <div class="invalid-feedback">Please provide your motivation letter.</div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Previous Experience</label>
+                                {% render_field form.previous_experience class="form-control" rows="4" placeholder="Describe any relevant work or internship experience..." %}
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Skills and Competencies</label>
+                                {% render_field form.skills class="form-control" rows="3" placeholder="List your relevant skills and competencies..." %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Section -->
+                    <div class="form-actions d-flex gap-3 pt-4 border-top">
+                        <button type="submit" class="btn btn-brand btn-lg flex-fill">
+                            <i class="bi bi-send me-2"></i>Submit Application
+                        </button>
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg">
+                            <i class="bi bi-arrow-left me-2"></i>Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.form-section {
+    position: relative;
+}
+
+.form-section-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-light);
+}
+
+.form-icon-container {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.form-label.required::after {
+    content: ' *';
+    color: var(--danger);
+}
+
+.file-upload-container {
+    position: relative;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-2);
+    transition: all var(--transition);
+    min-height: 120px;
+}
+
+.file-upload-container:hover {
+    border-color: var(--brand-primary);
+    background: rgba(249, 115, 22, 0.05);
+}
+
+.modern-file-input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.file-upload-overlay {
+    padding: 2rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.file-upload-icon {
+    font-size: 2.5rem;
+    color: var(--brand-primary);
+    margin-bottom: 1rem;
+}
+
+.file-upload-text {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.file-upload-hint {
+    color: var(--text-muted);
+}
+
+.form-actions {
+    background: var(--surface-2);
+    margin: 0 -1.5rem -1.5rem -1.5rem;
+    padding: 1.5rem;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+@media (max-width: 768px) {
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+</style>
+{% endblock %}

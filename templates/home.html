@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ElevatePro Internships - Elevating Careers{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero card-elevated p-4 p-md-5 mb-5 rounded-3 animate-slide-up">
+    <div class="container-fluid py-3">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-3 text-brand">ElevatePro Internships</h1>
+                <p class="lead mb-4">A modern platform to streamline internship management: applications, evaluations, reports, and career development—designed for the future of professional growth.</p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a class="btn btn-brand btn-lg" href="{% url 'applications:apply' %}">
+                        <i class="bi bi-rocket-takeoff me-2"></i>Apply Now
+                    </a>
+                    <a class="btn btn-outline-secondary btn-lg" href="{% url 'internships:list' %}">
+                        <i class="bi bi-search me-2"></i>Browse Opportunities
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center">
+                <img src="{% static 'images/logo.svg' %}" width="200" height="200" alt="ElevatePro Logo" class="animate-float">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<div class="row g-4 mb-5">
+    <div class="col-12">
+        <h2 class="h3 section-title text-center mb-4">Why Choose ElevatePro?</h2>
+    </div>
+    
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-elevated h-100 animate-slide-up" style="animation-delay: 0.1s">
+            <div class="card-body text-center p-4">
+                <div class="mb-3">
+                    <i class="bi bi-lightning-charge display-4 text-brand"></i>
+                </div>
+                <h5 class="card-title">Streamlined Process</h5>
+                <p class="card-text text-muted">Apply directly without creating accounts. Our system automatically handles the rest once you're approved.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-elevated h-100 animate-slide-up" style="animation-delay: 0.2s">
+            <div class="card-body text-center p-4">
+                <div class="mb-3">
+                    <i class="bi bi-graph-up-arrow display-4 text-brand"></i>
+                </div>
+                <h5 class="card-title">Career Growth</h5>
+                <p class="card-text text-muted">Comprehensive evaluation system with detailed feedback to accelerate your professional development.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card card-elevated h-100 animate-slide-up" style="animation-delay: 0.3s">
+            <div class="card-body text-center p-4">
+                <div class="mb-3">
+                    <i class="bi bi-people display-4 text-brand"></i>
+                </div>
+                <h5 class="card-title">Expert Mentorship</h5>
+                <p class="card-text text-muted">Work with experienced supervisors who provide guidance and support throughout your internship journey.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works Section -->
+<div class="card card-elevated mb-5 animate-slide-up">
+    <div class="card-body p-4 p-md-5">
+        <h3 class="section-title text-center mb-5">How It Works</h3>
+        
+        <div class="row g-4">
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="text-center">
+                    <div class="bg-brand text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">1</span>
+                    </div>
+                    <h5>Apply</h5>
+                    <p class="text-muted small">Submit your application with required documents. No account needed initially.</p>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="text-center">
+                    <div class="bg-brand text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">2</span>
+                    </div>
+                    <h5>Review</h5>
+                    <p class="text-muted small">Our admin team carefully reviews your application and qualifications.</p>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="text-center">
+                    <div class="bg-brand text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">3</span>
+                    </div>
+                    <h5>Approval</h5>
+                    <p class="text-muted small">Upon approval, your intern account is automatically created with login credentials.</p>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-6 col-lg-3">
+                <div class="text-center">
+                    <div class="bg-brand text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <span class="fw-bold fs-4">4</span>
+                    </div>
+                    <h5>Start</h5>
+                    <p class="text-muted small">Begin your internship journey with access to reports, evaluations, and mentorship.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Role-Based Access Section -->
+<div class="row g-4 mb-5">
+    <div class="col-12">
+        <h3 class="section-title text-center mb-4">Access by Role</h3>
+    </div>
+    
+    <div class="col-12 col-md-4">
+        <div class="card card-elevated h-100 animate-slide-up" style="animation-delay: 0.1s">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-warning bg-opacity-10 text-warning rounded-circle p-2 me-3">
+                        <i class="bi bi-shield-lock fs-4"></i>
+                    </div>
+                    <h5 class="mb-0">Administrator</h5>
+                </div>
+                <p class="text-muted mb-3">Manage the entire platform, review applications, create internships, and oversee system operations.</p>
+                {% if user.is_authenticated and user.is_admin %}
+                    <a class="btn btn-outline-warning" href="{% url 'dashboard:admin' %}">
+                        <i class="bi bi-speedometer2 me-1"></i>Admin Dashboard
+                    </a>
+                {% else %}
+                    <a class="btn btn-outline-warning" href="{% url 'accounts:login' %}">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>Admin Login
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-md-4">
+        <div class="card card-elevated h-100 animate-slide-up" style="animation-delay: 0.2s">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-info bg-opacity-10 text-info rounded-circle p-2 me-3">
+                        <i class="bi bi-people fs-4"></i>
+                    </div>
+                    <h5 class="mb-0">Supervisor</h5>
+                </div>
+                <p class="text-muted mb-3">Review intern reports, conduct evaluations, provide feedback, and guide professional development.</p>
+                {% if user.is_authenticated and user.is_supervisor %}
+                    <a class="btn btn-outline-info" href="{% url 'dashboard:supervisor' %}">
+                        <i class="bi bi-speedometer2 me-1"></i>Supervisor Dashboard
+                    </a>
+                {% else %}
+                    <a class="btn btn-outline-info" href="{% url 'accounts:login' %}">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>Supervisor Login
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-12 col-md-4">
+        <div class="card card-elevated h-100 animate-slide-up" style="animation-delay: 0.3s">
+            <div class="card-body p-4">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-success bg-opacity-10 text-success rounded-circle p-2 me-3">
+                        <i class="bi bi-mortarboard fs-4"></i>
+                    </div>
+                    <h5 class="mb-0">Intern</h5>
+                </div>
+                <p class="text-muted mb-3">Submit reports, track progress, receive evaluations, and build your professional portfolio.</p>
+                {% if user.is_authenticated and user.is_intern %}
+                    <a class="btn btn-outline-success" href="{% url 'dashboard:intern' %}">
+                        <i class="bi bi-speedometer2 me-1"></i>Intern Dashboard
+                    </a>
+                {% else %}
+                    <a class="btn btn-outline-success" href="{% url 'applications:apply' %}">
+                        <i class="bi bi-person-plus me-1"></i>Apply for Internship
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="text-center animate-slide-up">
+    <div class="card card-gradient text-white p-5 rounded-3">
+        <h3 class="mb-3">Ready to Elevate Your Career?</h3>
+        <p class="lead mb-4">Join thousands of successful interns who have launched their careers through our platform.</p>
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a class="btn btn-light btn-lg" href="{% url 'applications:apply' %}">
+                <i class="bi bi-rocket-takeoff me-2"></i>Start Your Journey
+            </a>
+            <a class="btn btn-outline-light btn-lg" href="{% url 'internships:list' %}">
+                <i class="bi bi-binoculars me-2"></i>Explore Opportunities
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+</style>
+{% endblock %}
