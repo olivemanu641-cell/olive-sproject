@@ -45,6 +45,9 @@ class User(AbstractUser):
         SUPERVISOR = 'supervisor', _('Supervisor')
         INTERN = 'intern', _('Intern')
     
+    # Override username to allow null/blank since we use email
+    username = models.CharField(max_length=150, blank=True, null=True)
+    
     # Basic Information
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(_('first name'), max_length=150)

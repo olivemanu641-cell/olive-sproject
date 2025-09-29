@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -196,7 +197,7 @@ class InternshipApplication(models.Model):
         """Approve the application"""
         self.status = self.Status.APPROVED
         self.reviewed_by = admin_user
-        self.review_date = models.timezone.now()
+        self.review_date = timezone.now()
         self.review_notes = notes
         self.save()
     
@@ -204,7 +205,7 @@ class InternshipApplication(models.Model):
         """Reject the application"""
         self.status = self.Status.REJECTED
         self.reviewed_by = admin_user
-        self.review_date = models.timezone.now()
+        self.review_date = timezone.now()
         self.review_notes = notes
         self.save()
     

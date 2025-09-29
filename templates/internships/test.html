@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Test - ElevatePro Internships{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1>Template Test</h1>
+    <p>If you can see this, templates are working correctly.</p>
+    <a href="{% url 'internships:list' %}" class="btn btn-primary">Back to Internships</a>
+</div>
+{% endblock %}

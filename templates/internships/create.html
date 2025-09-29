@@ -1,0 +1,479 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create Internship - ElevatePro Internships{% endblock %}
+
+{% block extra_css %}
+<style>
+    .form-section {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .section-title {
+        color: #2c3e50;
+        border-bottom: 2px solid #f39c12;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .required-field::after {
+        content: " *";
+        color: #dc3545;
+    }
+    
+    .help-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+        margin-top: 0.25rem;
+    }
+    
+    .btn-create {
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-create:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+    }
+    
+    .preview-card {
+        background: #f8f9fa;
+        border: 2px dashed #dee2e6;
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        margin-top: 2rem;
+    }
+    
+    .currency-input {
+        position: relative;
+    }
+    
+    .currency-input::before {
+        content: "CFA";
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+        font-weight: 500;
+        z-index: 10;
+    }
+    
+    .currency-input input {
+        padding-left: 50px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-0">
+                <i class="fas fa-plus-circle text-primary me-2"></i>
+                Create New Internship
+            </h1>
+            <p class="text-muted mb-0">Add a new internship opportunity to the system</p>
+        </div>
+        <div>
+            <a href="{% url 'internships:manage' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>
+                Back to Manage
+            </a>
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Basic Information Section -->
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="fas fa-info-circle me-2"></i>
+                Basic Information
+            </h3>
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label for="{{ form.title.id_for_label }}" class="form-label required-field">
+                            Internship Title
+                        </label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <div class="text-danger small mt-1">{{ form.title.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.department.id_for_label }}" class="form-label required-field">
+                            Department
+                        </label>
+                        {{ form.department }}
+                        {% if form.department.errors %}
+                            <div class="text-danger small mt-1">{{ form.department.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}" class="form-label required-field">
+                    Description
+                </label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="text-danger small mt-1">{{ form.description.errors.0 }}</div>
+                {% endif %}
+                <div class="help-text">Provide a detailed description of the internship opportunity</div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.requirements.id_for_label }}" class="form-label required-field">
+                            Requirements
+                        </label>
+                        {{ form.requirements }}
+                        {% if form.requirements.errors %}
+                            <div class="text-danger small mt-1">{{ form.requirements.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.responsibilities.id_for_label }}" class="form-label required-field">
+                            Responsibilities
+                        </label>
+                        {{ form.responsibilities }}
+                        {% if form.responsibilities.errors %}
+                            <div class="text-danger small mt-1">{{ form.responsibilities.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Details Section -->
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="fas fa-cog me-2"></i>
+                Internship Details
+            </h3>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.location.id_for_label }}" class="form-label required-field">
+                            Location
+                        </label>
+                        {{ form.location }}
+                        {% if form.location.errors %}
+                            <div class="text-danger small mt-1">{{ form.location.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="{{ form.internship_type.id_for_label }}" class="form-label">
+                            Type
+                        </label>
+                        {{ form.internship_type }}
+                        {% if form.internship_type.errors %}
+                            <div class="text-danger small mt-1">{{ form.internship_type.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="{{ form.duration.id_for_label }}" class="form-label">
+                            Duration
+                        </label>
+                        {{ form.duration }}
+                        {% if form.duration.errors %}
+                            <div class="text-danger small mt-1">{{ form.duration.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.salary_amount.id_for_label }}" class="form-label">
+                            Salary/Stipend Amount
+                        </label>
+                        <div class="currency-input">
+                            {{ form.salary_amount }}
+                        </div>
+                        {% if form.salary_amount.errors %}
+                            <div class="text-danger small mt-1">{{ form.salary_amount.errors.0 }}</div>
+                        {% endif %}
+                        <div class="help-text">{{ form.salary_amount.help_text }}</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.intern_payment_amount.id_for_label }}" class="form-label">
+                            Intern Payment Amount
+                        </label>
+                        <div class="currency-input">
+                            {{ form.intern_payment_amount }}
+                        </div>
+                        {% if form.intern_payment_amount.errors %}
+                            <div class="text-danger small mt-1">{{ form.intern_payment_amount.errors.0 }}</div>
+                        {% endif %}
+                        <div class="help-text">{{ form.intern_payment_amount.help_text }}</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.supervisor.id_for_label }}" class="form-label">
+                            Assigned Supervisor
+                        </label>
+                        {{ form.supervisor }}
+                        {% if form.supervisor.errors %}
+                            <div class="text-danger small mt-1">{{ form.supervisor.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.benefits.id_for_label }}" class="form-label">
+                    Additional Benefits
+                </label>
+                {{ form.benefits }}
+                {% if form.benefits.errors %}
+                    <div class="text-danger small mt-1">{{ form.benefits.errors.0 }}</div>
+                {% endif %}
+                <div class="help-text">List any additional benefits offered (optional)</div>
+            </div>
+        </div>
+
+        <!-- Timeline Section -->
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="fas fa-calendar-alt me-2"></i>
+                Timeline & Application
+            </h3>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.application_deadline.id_for_label }}" class="form-label required-field">
+                            Application Deadline
+                        </label>
+                        {{ form.application_deadline }}
+                        {% if form.application_deadline.errors %}
+                            <div class="text-danger small mt-1">{{ form.application_deadline.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.start_date.id_for_label }}" class="form-label required-field">
+                            Start Date
+                        </label>
+                        {{ form.start_date }}
+                        {% if form.start_date.errors %}
+                            <div class="text-danger small mt-1">{{ form.start_date.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="{{ form.end_date.id_for_label }}" class="form-label required-field">
+                            End Date
+                        </label>
+                        {{ form.end_date }}
+                        {% if form.end_date.errors %}
+                            <div class="text-danger small mt-1">{{ form.end_date.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.max_applicants.id_for_label }}" class="form-label">
+                            Maximum Applicants
+                        </label>
+                        {{ form.max_applicants }}
+                        {% if form.max_applicants.errors %}
+                            <div class="text-danger small mt-1">{{ form.max_applicants.errors.0 }}</div>
+                        {% endif %}
+                        <div class="help-text">{{ form.max_applicants.help_text }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div class="form-section">
+            <h3 class="section-title">
+                <i class="fas fa-sliders-h me-2"></i>
+                Settings
+            </h3>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-check mb-3">
+                        {{ form.is_active }}
+                        <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                            <strong>Active</strong>
+                        </label>
+                        <div class="help-text">Whether this internship is currently accepting applications</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-check mb-3">
+                        {{ form.is_featured }}
+                        <label class="form-check-label" for="{{ form.is_featured.id_for_label }}">
+                            <strong>Featured</strong>
+                        </label>
+                        <div class="help-text">{{ form.is_featured.help_text }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Errors -->
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <!-- Action Buttons -->
+        <div class="form-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{% url 'internships:manage' %}" class="btn btn-outline-secondary btn-lg">
+                    <i class="fas fa-times me-1"></i>
+                    Cancel
+                </a>
+                <div>
+                    <button type="button" class="btn btn-outline-primary btn-lg me-3" onclick="previewInternship()">
+                        <i class="fas fa-eye me-1"></i>
+                        Preview
+                    </button>
+                    <button type="submit" class="btn btn-success btn-lg" style="background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%); border: none; font-weight: 600; padding: 12px 30px; font-size: 16px;">
+                        <i class="fas fa-plus me-2"></i>
+                        CREATE INTERNSHIP
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Internship Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="previewContent">
+                    <!-- Preview content will be populated by JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function previewInternship() {
+    const title = document.getElementById('{{ form.title.id_for_label }}').value;
+    const department = document.getElementById('{{ form.department.id_for_label }}').value;
+    const description = document.getElementById('{{ form.description.id_for_label }}').value;
+    const location = document.getElementById('{{ form.location.id_for_label }}').value;
+    const type = document.getElementById('{{ form.internship_type.id_for_label }}').value;
+    const duration = document.getElementById('{{ form.duration.id_for_label }}').value;
+    const salary = document.getElementById('{{ form.salary_amount.id_for_label }}').value;
+    
+    const previewContent = `
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">${title || 'Internship Title'}</h4>
+                <small>${department || 'Department'} • ${location || 'Location'}</small>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Type:</strong> ${type || 'Not specified'}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Duration:</strong> ${duration || 'Not specified'}
+                    </div>
+                </div>
+                ${salary ? `<div class="mb-3"><strong>Salary:</strong> ${salary} CFA/month</div>` : ''}
+                <div class="mb-3">
+                    <strong>Description:</strong>
+                    <p class="mt-2">${description || 'No description provided'}</p>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('previewContent').innerHTML = previewContent;
+    const modal = new bootstrap.Modal(document.getElementById('previewModal'));
+    modal.show();
+}
+
+// Form validation
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const startDateInput = document.getElementById('{{ form.start_date.id_for_label }}');
+    const endDateInput = document.getElementById('{{ form.end_date.id_for_label }}');
+    const deadlineInput = document.getElementById('{{ form.application_deadline.id_for_label }}');
+    
+    function validateDates() {
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+        const deadline = new Date(deadlineInput.value);
+        
+        // Clear previous custom validity
+        startDateInput.setCustomValidity('');
+        endDateInput.setCustomValidity('');
+        deadlineInput.setCustomValidity('');
+        
+        if (startDate && endDate && startDate >= endDate) {
+            endDateInput.setCustomValidity('End date must be after start date');
+        }
+        
+        if (deadline && startDate && deadline >= startDate) {
+            deadlineInput.setCustomValidity('Application deadline must be before start date');
+        }
+    }
+    
+    startDateInput.addEventListener('change', validateDates);
+    endDateInput.addEventListener('change', validateDates);
+    deadlineInput.addEventListener('change', validateDates);
+});
+</script>
+{% endblock %}

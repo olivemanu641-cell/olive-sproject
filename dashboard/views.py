@@ -4,7 +4,8 @@ Views for dashboard app
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
-from django.db.models import Count, Q
+from django.db.models import Count, Q, Avg
+from django.db import models
 from django.utils import timezone
 from datetime import timedelta
 
@@ -158,7 +159,7 @@ class SupervisorDashboardView(SupervisorRequiredMixin, TemplateView):
                 evaluation_date__gte=timezone.now().replace(day=1)
             ).count(),
             'average_rating': evaluations.aggregate(
-                avg_rating=models.Avg('overall_performance')
+                avg_rating=Avg('overall_performance')
             )['avg_rating'] or 0,
         }
         

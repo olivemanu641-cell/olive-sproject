@@ -18,6 +18,7 @@ class Internship(models.Model):
         PAID = 'paid', _('Paid')
         UNPAID = 'unpaid', _('Unpaid')
         STIPEND = 'stipend', _('Stipend')
+        PAID_BY_INTERN = 'paid_by_intern', _('Paid by Intern')
     
     class Duration(models.TextChoices):
         SHORT = '1-3', _('1-3 months')
@@ -81,7 +82,16 @@ class Internship(models.Model):
         decimal_places=2,
         null=True,
         blank=True,
-        help_text=_('Monthly amount in CFA')
+        help_text=_('Monthly amount in CFA (for paid internships)')
+    )
+    
+    intern_payment_amount = models.DecimalField(
+        _('Intern Payment Amount'),
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        help_text=_('Amount intern pays for the internship (CFA)')
     )
     
     benefits = models.TextField(

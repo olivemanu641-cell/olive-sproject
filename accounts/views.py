@@ -15,7 +15,20 @@ class CustomLoginView(LoginView):
     Custom login view with additional checks
     """
     template_name = 'accounts/login.html'
-    redirect_authenticated_user = True
+    redirect_authenticated_user = False  # Changed to False to prevent conflicts
+    
+    def get_success_url(self):
+        """Redirect based on user role after successful login"""
+        user = self.request.user
+        
+        if user.is_admin:
+            return reverse_lazy('dashboard:admin')
+        elif user.is_supervisor:
+            return reverse_lazy('dashboard:supervisor')
+        elif user.is_intern:
+            return reverse_lazy('dashboard:intern')
+        else:
+            return reverse_lazy('accounts:profile')
     
     def form_valid(self, form):
         """Check if user is approved before allowing login"""

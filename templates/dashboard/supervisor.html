@@ -1,0 +1,369 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Supervisor Dashboard - ElevatePro Internships{% endblock %}
+
+{% block extra_css %}
+<style>
+    .dashboard-header {
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 15px 15px;
+    }
+    
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-left: 4px solid #f39c12;
+        transition: transform 0.3s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-2px);
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #f39c12;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .section-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .section-title {
+        color: #2c3e50;
+        border-bottom: 2px solid #f39c12;
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+    }
+    
+    .intern-card {
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .intern-card:hover {
+        border-color: #f39c12;
+        box-shadow: 0 2px 8px rgba(243, 156, 18, 0.2);
+    }
+    
+    .report-item {
+        border-left: 3px solid #f39c12;
+        padding-left: 1rem;
+        margin-bottom: 1rem;
+        background: #f8f9fa;
+        border-radius: 0 8px 8px 0;
+        padding: 1rem;
+    }
+    
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-weight: 500;
+    }
+    
+    .status-submitted {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    .status-under_review {
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+    
+    .status-approved {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    
+    .quick-action-btn {
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+    }
+    
+    .quick-action-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<div class="dashboard-header">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="mb-2">Welcome, {{ user.get_full_name }}!</h1>
+                <p class="mb-0">
+                    <i class="fas fa-user-tie me-2"></i>
+                    Supervisor Dashboard - Manage your interns and review their progress
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="text-white">
+                    <i class="fas fa-calendar me-2"></i>
+                    {{ "now"|date:"F d, Y" }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Statistics Row -->
+    <div class="row">
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card text-center">
+                <div class="stat-number">{{ intern_stats.total }}</div>
+                <div class="stat-label">Total Interns</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card text-center">
+                <div class="stat-number">{{ intern_stats.active }}</div>
+                <div class="stat-label">Active Interns</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card text-center">
+                <div class="stat-number">{{ report_stats.pending }}</div>
+                <div class="stat-label">Pending Reports</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="stat-card text-center">
+                <div class="stat-number">{{ evaluation_stats.average_rating|floatformat:1 }}</div>
+                <div class="stat-label">Avg Rating</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- My Interns Section -->
+        <div class="col-lg-8">
+            <div class="section-card">
+                <h4 class="section-title">
+                    <i class="fas fa-users me-2"></i>
+                    My Interns
+                </h4>
+                
+                {% if my_interns %}
+                    {% for intern in my_interns %}
+                        <div class="intern-card">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h6 class="mb-1">{{ intern.get_full_name }}</h6>
+                                    <p class="text-muted mb-1 small">
+                                        <i class="fas fa-envelope me-1"></i>
+                                        {{ intern.email }}
+                                    </p>
+                                    <p class="text-muted mb-0 small">
+                                        <i class="fas fa-briefcase me-1"></i>
+                                        {% for internship in intern.supervised_internships.all %}
+                                            {{ internship.title }}{% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                                <div class="col-md-3 text-center">
+                                    <small class="text-muted">Reports Submitted</small>
+                                    <div class="h5 mb-0 text-primary">{{ intern.report_count|default:0 }}</div>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <a href="{% url 'reports:list' %}" class="btn quick-action-btn btn-sm">
+                                        <i class="fas fa-eye me-1"></i>
+                                        View Reports
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No Interns Assigned</h5>
+                        <p class="text-muted">You don't have any interns assigned to you yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Recent Reports Section -->
+            <div class="section-card">
+                <h4 class="section-title">
+                    <i class="fas fa-file-alt me-2"></i>
+                    Recent Reports to Review
+                </h4>
+                
+                {% if recent_reports %}
+                    {% for report in recent_reports %}
+                        <div class="report-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h6 class="mb-1">{{ report.title }}</h6>
+                                    <p class="text-muted mb-1 small">
+                                        by {{ report.intern.get_full_name }} • 
+                                        {{ report.submitted_at|date:"M d, Y" }}
+                                    </p>
+                                    <span class="status-badge status-{{ report.status }}">
+                                        {{ report.get_status_display }}
+                                    </span>
+                                </div>
+                                <div>
+                                    <a href="{% url 'reports:detail' report.pk %}" class="btn quick-action-btn btn-sm">
+                                        <i class="fas fa-eye me-1"></i>
+                                        Review
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    
+                    <div class="text-center mt-3">
+                        <a href="{% url 'reports:supervisor_list' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-list me-1"></i>
+                            View All Reports
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-file-alt fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No Reports to Review</h5>
+                        <p class="text-muted">All reports have been reviewed.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Quick Actions -->
+            <div class="section-card">
+                <h5 class="section-title">Quick Actions</h5>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'reports:supervisor_list' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-file-alt me-2"></i>
+                        Review Reports
+                    </a>
+                    <a href="{% url 'reports:evaluation_create' %}" class="btn btn-outline-success">
+                        <i class="fas fa-star me-2"></i>
+                        Create Evaluation
+                    </a>
+                    <a href="{% url 'internships:list' %}" class="btn btn-outline-info">
+                        <i class="fas fa-briefcase me-2"></i>
+                        View Internships
+                    </a>
+                </div>
+            </div>
+
+            <!-- Monthly Statistics -->
+            <div class="section-card">
+                <h5 class="section-title">This Month</h5>
+                <div class="row text-center">
+                    <div class="col-6 mb-3">
+                        <div class="h4 text-primary mb-0">{{ report_stats.this_month }}</div>
+                        <small class="text-muted">Reports Received</small>
+                    </div>
+                    <div class="col-6 mb-3">
+                        <div class="h4 text-success mb-0">{{ evaluation_stats.this_month }}</div>
+                        <small class="text-muted">Evaluations Done</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Evaluations -->
+            <div class="section-card">
+                <h5 class="section-title">Recent Evaluations</h5>
+                {% if recent_evaluations %}
+                    {% for evaluation in recent_evaluations %}
+                        <div class="d-flex justify-content-between align-items-center mb-2 p-2 bg-light rounded">
+                            <div>
+                                <small class="fw-bold">{{ evaluation.intern.get_full_name }}</small><br>
+                                <small class="text-muted">{{ evaluation.evaluation_date|date:"M d" }}</small>
+                            </div>
+                            <div class="text-end">
+                                <div class="badge bg-primary">{{ evaluation.overall_performance }}/5</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted small">No recent evaluations</p>
+                {% endif %}
+            </div>
+
+            <!-- Performance Overview -->
+            <div class="section-card">
+                <h5 class="section-title">Performance Overview</h5>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small>Average Performance</small>
+                        <small>{{ evaluation_stats.average_rating|floatformat:1 }}/5</small>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-warning" style="width: {% widthratio evaluation_stats.average_rating 5 100 %}%"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <small>Reports Reviewed</small>
+                        <small>{{ report_stats.reviewed }}/{{ report_stats.total }}</small>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar bg-success" style="width: {% if report_stats.total > 0 %}{% widthratio report_stats.reviewed report_stats.total 100 %}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Auto-refresh dashboard every 5 minutes
+setInterval(function() {
+    if (document.hidden === false) {
+        location.reload();
+    }
+}, 300000);
+
+// Add smooth animations to stat cards
+document.addEventListener('DOMContentLoaded', function() {
+    const statCards = document.querySelectorAll('.stat-card');
+    statCards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.classList.add('animate__animated', 'animate__fadeInUp');
+    });
+});
+</script>
+{% endblock %}

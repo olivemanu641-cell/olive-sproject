@@ -1,0 +1,485 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Available Internships - ElevatePro Internships{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        color: white;
+        padding: 4rem 0;
+        margin-bottom: 3rem;
+        border-radius: 0 0 20px 20px;
+    }
+    
+    .search-section {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .internship-card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+    
+    .internship-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    
+    .featured-card {
+        border: 2px solid #f39c12;
+        position: relative;
+    }
+    
+    .featured-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        z-index: 10;
+    }
+    
+    .type-badge {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-weight: 500;
+        display: inline-block;
+    }
+    
+    .type-paid {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    
+    .type-unpaid {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    
+    .type-stipend {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    
+    .type-paid_by_intern {
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+    
+    .deadline-warning {
+        color: #dc3545;
+        font-weight: 600;
+    }
+    
+    .deadline-soon {
+        color: #fd7e14;
+        font-weight: 600;
+    }
+    
+    .deadline-normal {
+        color: #28a745;
+    }
+    
+    .apply-btn {
+        background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    
+    .apply-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        color: white;
+    }
+    
+    .filter-chip {
+        background: #e9ecef;
+        border: 1px solid #dee2e6;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+        margin: 0.25rem;
+        display: inline-block;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .filter-chip:hover {
+        background: #f39c12;
+        color: white;
+        border-color: #f39c12;
+    }
+    
+    .filter-chip.active {
+        background: #f39c12;
+        color: white;
+        border-color: #f39c12;
+    }
+    
+    .stats-section {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">Find Your Perfect Internship</h1>
+                <p class="lead mb-4">Discover amazing internship opportunities and kickstart your career with ElevatePro</p>
+                <div class="d-flex flex-wrap gap-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-briefcase fa-lg me-2"></i>
+                        <span>{{ total_internships }} Opportunities</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-star fa-lg me-2"></i>
+                        <span>{{ featured_internships }} Featured</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-building fa-lg me-2"></i>
+                        <span>Multiple Departments</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="fas fa-graduation-cap" style="font-size: 8rem; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Search and Filters -->
+    <div class="search-section">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label for="search" class="form-label">
+                    <i class="fas fa-search me-1"></i>
+                    Search Internships
+                </label>
+                <input type="text" class="form-control" id="search" name="search" 
+                       value="{{ current_search }}" placeholder="Title, department, location...">
+            </div>
+            <div class="col-md-2">
+                <label for="type" class="form-label">Type</label>
+                <select name="type" id="type" class="form-select">
+                    <option value="">All Types</option>
+                    {% for value, label in types %}
+                        <option value="{{ value }}" {% if current_type == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" class="form-control" id="location" name="location" 
+                       value="{{ current_location }}" placeholder="City, country...">
+            </div>
+            <div class="col-md-3">
+                <label for="department" class="form-label">Department</label>
+                <input type="text" class="form-control" id="department" name="department" 
+                       value="{{ current_department }}" placeholder="Department...">
+            </div>
+            <div class="col-12 text-center">
+                <button type="submit" class="btn apply-btn me-2">
+                    <i class="fas fa-search me-1"></i>
+                    Search Internships
+                </button>
+                <a href="{% url 'internships:list' %}" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-1"></i>
+                    Clear Filters
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Quick Filters -->
+    {% if locations or departments %}
+        <div class="mb-4">
+            <h6 class="mb-3">Quick Filters:</h6>
+            <div class="d-flex flex-wrap">
+                {% for location in locations %}
+                    <a href="?location={{ location }}" class="filter-chip text-decoration-none">
+                        <i class="fas fa-map-marker-alt me-1"></i>
+                        {{ location }}
+                    </a>
+                {% endfor %}
+                {% for department in departments %}
+                    <a href="?department={{ department }}" class="filter-chip text-decoration-none">
+                        <i class="fas fa-building me-1"></i>
+                        {{ department }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Results Summary -->
+    <div class="stats-section">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <h4 class="text-primary mb-0">{{ internships|length }}</h4>
+                <small class="text-muted">Results Found</small>
+            </div>
+            <div class="col-md-3">
+                <h4 class="text-success mb-0">
+                    {% for internship in internships %}
+                        {% if internship.internship_type == 'paid' %}{{ forloop.counter0|add:1 }}{% endif %}
+                    {% empty %}0{% endfor %}
+                </h4>
+                <small class="text-muted">Paid Positions</small>
+            </div>
+            <div class="col-md-3">
+                <h4 class="text-warning mb-0">
+                    {% for internship in internships %}
+                        {% if internship.is_featured %}{{ forloop.counter0|add:1 }}{% endif %}
+                    {% empty %}0{% endfor %}
+                </h4>
+                <small class="text-muted">Featured</small>
+            </div>
+            <div class="col-md-3">
+                <h4 class="text-info mb-0">{{ departments|length }}</h4>
+                <small class="text-muted">Departments</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Internships List -->
+    <div class="row">
+        {% for internship in internships %}
+            <div class="col-lg-6 col-xl-4">
+                <div class="card internship-card {% if internship.is_featured %}featured-card{% endif %}">
+                    {% if internship.is_featured %}
+                        <div class="featured-badge">
+                            <i class="fas fa-star me-1"></i>
+                            FEATURED
+                        </div>
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="type-badge type-{{ internship.internship_type }}">
+                                {{ internship.get_internship_type_display }}
+                            </span>
+                            <small class="text-muted">{{ internship.get_duration_display }}</small>
+                        </div>
+                        
+                        <h5 class="card-title mb-2">{{ internship.title }}</h5>
+                        
+                        <div class="mb-3">
+                            <p class="text-muted mb-1">
+                                <i class="fas fa-building me-2"></i>
+                                {{ internship.department }}
+                            </p>
+                            <p class="text-muted mb-1">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                {{ internship.location }}
+                            </p>
+                            {% if internship.supervisor %}
+                                <p class="text-muted mb-1">
+                                    <i class="fas fa-user-tie me-2"></i>
+                                    {{ internship.supervisor.get_full_name }}
+                                </p>
+                            {% endif %}
+                        </div>
+                        
+                        <p class="card-text">
+                            {{ internship.description|truncatewords:20 }}
+                        </p>
+                        
+                        <!-- Compensation Info -->
+                        {% if internship.salary_amount %}
+                            <div class="mb-2">
+                                <strong class="text-success">
+                                    <i class="fas fa-money-bill-wave me-1"></i>
+                                    {{ internship.salary_amount|floatformat:0 }} CFA/month
+                                </strong>
+                            </div>
+                        {% endif %}
+                        
+                        {% if internship.intern_payment_amount %}
+                            <div class="mb-2">
+                                <strong class="text-info">
+                                    <i class="fas fa-credit-card me-1"></i>
+                                    Investment: {{ internship.intern_payment_amount|floatformat:0 }} CFA
+                                </strong>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Deadline -->
+                        <div class="mb-3">
+                            <small class="{% if internship.days_until_deadline <= 3 %}deadline-warning{% elif internship.days_until_deadline <= 7 %}deadline-soon{% else %}deadline-normal{% endif %}">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                Deadline: {{ internship.application_deadline|date:"M d, Y" }}
+                                {% if internship.days_until_deadline <= 7 %}
+                                    ({{ internship.days_until_deadline }} days left)
+                                {% endif %}
+                            </small>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a href="{% url 'internships:detail' internship.pk %}" class="btn btn-outline-primary">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Learn More
+                            </a>
+                            <a href="{% url 'applications:apply_specific' internship.pk %}" class="btn apply-btn">
+                                <i class="fas fa-paper-plane me-1"></i>
+                                Apply Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No internships found</h4>
+                    <p class="text-muted">
+                        {% if current_search or current_type or current_location or current_department %}
+                            Try adjusting your search criteria or 
+                            <a href="{% url 'internships:list' %}">view all internships</a>.
+                        {% else %}
+                            Check back soon for new opportunities!
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <nav aria-label="Internships pagination" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if current_search %}&search={{ current_search }}{% endif %}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_department %}&department={{ current_department }}{% endif %}">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_department %}&department={{ current_department }}{% endif %}">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_department %}&department={{ current_department }}{% endif %}">
+                                {{ num }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_department %}&department={{ current_department }}{% endif %}">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_department %}&department={{ current_department }}{% endif %}">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    {% endif %}
+</div>
+
+<!-- Call to Action Section -->
+<div class="hero-section mt-5">
+    <div class="container text-center">
+        <h2 class="mb-3">Ready to Start Your Journey?</h2>
+        <p class="lead mb-4">Join thousands of students who have launched their careers through our internship program</p>
+        <a href="{% url 'applications:apply' %}" class="btn btn-light btn-lg">
+            <i class="fas fa-rocket me-2"></i>
+            Apply for an Internship
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Auto-complete for location and department fields
+document.addEventListener('DOMContentLoaded', function() {
+    // Add any JavaScript for enhanced search functionality
+    const searchInput = document.getElementById('search');
+    const locationInput = document.getElementById('location');
+    const departmentInput = document.getElementById('department');
+    
+    // Add search suggestions or auto-complete functionality here
+    // This could be enhanced with AJAX calls to get suggestions
+    
+    // Highlight current filters
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentType = urlParams.get('type');
+    const currentLocation = urlParams.get('location');
+    const currentDepartment = urlParams.get('department');
+    
+    // Highlight active filter chips
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+        const href = chip.getAttribute('href');
+        if (href && (
+            (currentLocation && href.includes(`location=${currentLocation}`)) ||
+            (currentDepartment && href.includes(`department=${currentDepartment}`))
+        )) {
+            chip.classList.add('active');
+        }
+    });
+});
+
+// Smooth scroll for apply buttons
+document.querySelectorAll('.apply-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        // Add loading state
+        const originalText = this.innerHTML;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Redirecting...';
+        this.disabled = true;
+        
+        // Allow the click to proceed after a brief delay
+        setTimeout(() => {
+            this.innerHTML = originalText;
+            this.disabled = false;
+        }, 1000);
+    });
+});
+</script>
+{% endblock %}

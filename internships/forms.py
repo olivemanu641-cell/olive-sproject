@@ -3,6 +3,7 @@ Forms for internships app
 """
 from django import forms
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from .models import Internship, InternshipSkill, InternshipSkillRequirement
 
 User = get_user_model()
@@ -18,7 +19,7 @@ class InternshipForm(forms.ModelForm):
         fields = [
             'title', 'description', 'requirements', 'responsibilities',
             'department', 'location', 'internship_type', 'duration',
-            'salary_amount', 'benefits',
+            'salary_amount', 'intern_payment_amount', 'benefits',
             'application_deadline', 'start_date', 'end_date', 'max_applicants',
             'supervisor', 'is_active', 'is_featured'
         ]
@@ -33,6 +34,7 @@ class InternshipForm(forms.ModelForm):
             'internship_type': forms.Select(attrs={'class': 'form-select'}),
             'duration': forms.Select(attrs={'class': 'form-select'}),
             'salary_amount': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0', 'placeholder': '50000'}),
+            'intern_payment_amount': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01', 'min': '0', 'placeholder': '25000'}),
             'benefits': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Additional benefits offered...'}),
             'application_deadline': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'start_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
@@ -65,7 +67,8 @@ class InternshipForm(forms.ModelForm):
         self.fields['end_date'].required = True
         
         # Add help text
-        self.fields['salary_amount'].help_text = f'Monthly amount in {getattr(settings, "CURRENCY", "CFA")}'
+        self.fields['salary_amount'].help_text = f'Monthly amount in {getattr(settings, "CURRENCY", "CFA")} (for paid internships)'
+        self.fields['intern_payment_amount'].help_text = f'Amount intern pays in {getattr(settings, "CURRENCY", "CFA")} (for paid-by-intern internships)'
         self.fields['max_applicants'].help_text = 'Maximum number of applications to accept'
         self.fields['is_featured'].help_text = 'Featured internships appear prominently on the homepage'
     
