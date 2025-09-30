@@ -97,6 +97,11 @@
       const forms = document.querySelectorAll('form.needs-validation');
       
       forms.forEach(form => {
+        // Skip validation for login forms
+        if (form.classList.contains('login-form')) {
+          return;
+        }
+        
         form.addEventListener('submit', (event) => {
           if (!form.checkValidity()) {
             event.preventDefault();
@@ -132,6 +137,11 @@
       const forms = document.querySelectorAll('form');
       
       forms.forEach(form => {
+        // Skip login forms to avoid interference
+        if (form.classList.contains('login-form')) {
+          return;
+        }
+        
         form.addEventListener('submit', (e) => {
           const submitBtn = form.querySelector('button[type="submit"]');
           if (submitBtn && form.checkValidity()) {

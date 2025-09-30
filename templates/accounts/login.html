@@ -16,33 +16,29 @@
             </div>
             
             <div class="card-body pt-4">
-                <form method="post" class="needs-validation" novalidate>
+                <form method="post" class="login-form" novalidate>
                     {% csrf_token %}
                     
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.errors }}
+                        </div>
+                    {% endif %}
+                    
                     <div class="mb-3">
-                        <label for="id_username" class="form-label">
-                            <i class="bi bi-envelope me-1"></i>Email Address
+                        <label for="{{ form.username.id_for_label }}" class="form-label">
+                            <i class="bi bi-envelope me-1"></i>{{ form.username.label }}
                         </label>
-                        <input type="email" 
-                               class="form-control" 
-                               id="id_username" 
-                               name="username" 
-                               placeholder="your.email@example.com"
-                               required>
+                        {{ form.username }}
                         <div class="invalid-feedback">Please enter a valid email address.</div>
                     </div>
                     
                     <div class="mb-3">
-                        <label for="id_password" class="form-label">
-                            <i class="bi bi-lock me-1"></i>Password
+                        <label for="{{ form.password.id_for_label }}" class="form-label">
+                            <i class="bi bi-lock me-1"></i>{{ form.password.label }}
                         </label>
                         <div class="position-relative">
-                            <input type="password" 
-                                   class="form-control" 
-                                   id="id_password" 
-                                   name="password" 
-                                   placeholder="Enter your password"
-                                   required>
+                            {{ form.password }}
                             <button type="button" 
                                     class="btn btn-link position-absolute end-0 top-50 translate-middle-y pe-3" 
                                     onclick="togglePassword()">
@@ -93,16 +89,30 @@
 
 <script>
 function togglePassword() {
-    const passwordField = document.getElementById('id_password');
+    const passwordField = document.querySelector('input[name="password"]');
     const toggleIcon = document.getElementById('toggleIcon');
     
-    if (passwordField.type === 'password') {
+    if (passwordField && passwordField.type === 'password') {
         passwordField.type = 'text';
         toggleIcon.className = 'bi bi-eye-slash';
-    } else {
+    } else if (passwordField) {
         passwordField.type = 'password';
         toggleIcon.className = 'bi bi-eye';
     }
 }
+
+// Debug form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.querySelector('form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            console.log('Form submitted');
+            const email = document.querySelector('input[name="username"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+            console.log('Email:', email);
+            console.log('Password length:', password.length);
+        });
+    }
+});
 </script>
 {% endblock %}

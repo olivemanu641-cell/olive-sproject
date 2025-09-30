@@ -10,6 +10,9 @@ from django.utils import timezone
 
 User = get_user_model()
 
+# Import Profile model for intern account creation
+from accounts.models import Profile
+
 
 class InternshipApplication(models.Model):
     """
@@ -222,7 +225,6 @@ class InternshipApplication(models.Model):
         
         # Create the intern user account
         intern_user = User.objects.create_user(
-            username=self.email.split('@')[0],  # Use email prefix as username
             email=self.email,
             first_name=self.first_name,
             last_name=self.last_name,
@@ -233,7 +235,7 @@ class InternshipApplication(models.Model):
         )
         
         # Update the intern's profile with application data
-        profile = intern_user.profile
+        profile, created = Profile.objects.get_or_create(user=intern_user)
         profile.address = self.address
         profile.city = self.city
         profile.country = self.country

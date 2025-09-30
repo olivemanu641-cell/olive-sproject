@@ -1,13 +1,13 @@
 """
 Views for accounts app
 """
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import User, Profile
-from .forms import ProfileForm
+from .forms import ProfileForm, EmailAuthenticationForm
 
 
 class CustomLoginView(LoginView):
@@ -15,7 +15,8 @@ class CustomLoginView(LoginView):
     Custom login view with additional checks
     """
     template_name = 'accounts/login.html'
-    redirect_authenticated_user = False  # Changed to False to prevent conflicts
+    form_class = EmailAuthenticationForm
+    redirect_authenticated_user = False
     
     def get_success_url(self):
         """Redirect based on user role after successful login"""
@@ -33,6 +34,7 @@ class CustomLoginView(LoginView):
     def form_valid(self, form):
         """Check if user is approved before allowing login"""
         user = form.get_user()
+        
         if not user.is_approved and not user.is_superuser:
             messages.error(
                 self.request,
@@ -44,7 +46,24 @@ class CustomLoginView(LoginView):
             self.request,
             f'Welcome back, {user.get_full_name()}!'
         )
+        
         return super().form_valid(form)
+
+
+class CustomLogoutView(LogoutView):
+    """
+    Custom logout view with success message
+    """
+    next_page = 'home'
+    http_method_names = ['get', 'post']
+    
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            messages.success(
+                request,
+                'You have been successfully logged out. Thank you for using ElevatePro Internships!'
+            )
+        return super().dispatch(request, *args, **kwargs)
 
 
 class ProfileView(LoginRequiredMixin, DetailView):
